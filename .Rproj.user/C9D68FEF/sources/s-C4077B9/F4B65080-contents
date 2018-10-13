@@ -1,0 +1,62 @@
+---
+title: "hw3-clarissp"
+author: "Clarissa Paz"
+date: "9/26/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(rgdal)
+require(leaflet)
+require(leaflet.extras)
+require(dplyr)
+require(readxl)
+require(stringr)
+```
+
+
+```{r}
+#Importing data for the map
+county <- readOGR("Allegheny_County_Boundary.geojson")
+plot(county)
+senate <- readOGR("Allegheny_County_Pennsylvania_Senate_District_Boundaries.geojson")
+wic <- readOGR("Allegheny_County_WIC_Vendor_Locations.geojson")
+```
+
+
+```{r}
+#Creating icon for wic data points 
+icons <- awesomeIconList(
+  makeAwesomeIcon(icon = "female", library = "fa", markerColor = "purple")
+  )
+#Creating the color palette for senate polygons 
+symbology <- colorFactor(c("#738BC1", "#C9705E"), c("R", "D"))
+
+```
+
+```{r}
+#Creating map
+leaflet() %>% 
+  #Default view set to Allegheny County 
+  setView(lng = -79.995575, lat = 40.4406763, zoom = 10) %>%
+  #Basemaps that users can choose from 
+  addProviderTiles("Esri.WorldGrayCanvas", group = "Gray Canvas", options = providerTileOptions(noWrap = TRUE)) %>%
+  addProviderTiles("CartoDB.DarkMatterNoLabels", group = "Dark Matter", options = providerTileOptions(noWrap = TRUE)) %>%
+  addProviderTiles("Esri.WorldTopoMap", group = "Topography", options = providerTileOptions(noWrap = TRUE)) %>%
+  
+  #Allows users to choose which basemap 
+  addLayersControl(
+    baseGroups = c("Gray Canvas", "Dark Matter", "Topography"),
+    options = layersControlOptions(collapsed = TRUE)
+  ) %>%
+
+  #Adds senate district boundary polygon to map 
+  addPolygons(data = senate, color = ~symbology(as.factor(PARTY))) %>%
+  #Adds legend for senate district boundry polygon 
+  addLegend(position = "bottomright", pal = symbology, values = as.factor(senate$PARTY), title = "Political Party") %>%
+  #Adds markers for wic centers 
+  addAwesomeMarkers(data = wic, icon = ~icons, popup = ~Address) %>%
+  #Adds Allegheny county line to map
+  addPolylines(data= county, color = "black") 
+```
+

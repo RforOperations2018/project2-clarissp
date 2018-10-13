@@ -1,0 +1,39 @@
+---
+title: "blah"
+author: "Clarissa Paz"
+date: "10/11/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(rgdal)
+require(leaflet)
+require(leaflet.extras)
+require(dplyr)
+require(readxl)
+require(stringr)
+require(sf)
+```
+
+```{r}
+#Importing data for the map
+county <- readOGR("https://data.pa.gov/api/geospatial/xq2b-bzbq?method=export&format=GeoJSON")
+counties_Sw <- subset(county, county_nam %in% ("ALLEGHENY", ))
+
+```
+
+```{r}
+test <- st_read("./Shapefiles/SouthwestPACounties.shp")
+test
+```
+
+```{r}
+mines <- readOGR("SouthwestPAIndustrialMineral.geojson")
+plot(mines)
+```
+
+```{r}
+resilient  <- readOGR("SouthwestPAResilientNetwork_.geojson")
+plot(resilient)
+```
+
