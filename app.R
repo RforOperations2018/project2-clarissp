@@ -14,42 +14,16 @@ require(shinythemes)
 require(RSocrata)
 require(httr)
 
-# Define UI for application that draws a histogram
-ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Old Faithful Geyser Data"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
-      
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
-)
+#Importing token for the API 
+token <- jsonlite::fromJSON("token.json")$token
 
-# Define server logic required to draw a histogram
-server <- function(input, output) {
-   
-   output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-   })
-}
+#Reading in the county boundaries for all of PA using the SODA API 
+county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json")
 
-# Run the application 
-shinyApp(ui = ui, server = server)
+#Attempt to subset the counties for the 10 Southwest county region that I need
+test_county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json?$county_nam=ALLEGHENY")
+test_county
+  
+sw_county <- subset(county, county_nam %in% c("ALLEGHENY", "ARMSTRONG","BEAVER","BUTLER","CAMBRIA","FAYETTE","GREENE","INDIANA","LAWERENCE","SOMERSET","WASHINGTION","WESTMORELAND"))
+sw_county
 
