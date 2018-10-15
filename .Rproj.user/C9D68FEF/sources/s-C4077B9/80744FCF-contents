@@ -21,10 +21,7 @@ token <- jsonlite::fromJSON("token.json")$token
 county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json", app_token = token)
 #When I add app_token to the end of this I get an error but when I take app_token out I don't get an error 
 
-#Attempt to subset the counties for the 10 Southwest county region that I need
-test_county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json?$county_nam=ALLEGHENY")
-test_county
-  
-sw_county <- subset(county, county_nam %in% c("ALLEGHENY", "ARMSTRONG","BEAVER","BUTLER","CAMBRIA","FAYETTE","GREENE","INDIANA","LAWERENCE","SOMERSET","WASHINGTION","WESTMORELAND"))
+#Subset the counties for the 10 Southwest county region that I need
+sw_county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json?$where=county_nam in('ALLEGHENY', 'ARMSTRONG','BEAVER','BUTLER','CAMBRIA','FAYETTE','GREENE','INDIANA','LAWERENCE','SOMERSET','WASHINGTION','WESTMORELAND')")
 sw_county
 
