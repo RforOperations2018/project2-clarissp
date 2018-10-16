@@ -18,12 +18,36 @@ require(httr)
 token <- jsonlite::fromJSON("token.json")$token
 
 #Reading in the county boundaries for all of PA using the SODA API 
-county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json")
+county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.geojson")
 
-#Attempt to subset the counties for the 10 Southwest county region that I need
-test_county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json?$county_nam=ALLEGHENY")
-test_county
-  
-sw_county <- subset(county, county_nam %in% c("ALLEGHENY", "ARMSTRONG","BEAVER","BUTLER","CAMBRIA","FAYETTE","GREENE","INDIANA","LAWERENCE","SOMERSET","WASHINGTION","WESTMORELAND"))
+
+#Subset the counties for the 10 Southwest county region that I need
+sw_county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.geojson?$where=county_nam in('ALLEGHENY', 'ARMSTRONG','BEAVER','BUTLER','CAMBRIA','FAYETTE','GREENE','INDIANA','LAWERENCE','SOMERSET','WASHINGTION','WESTMORELAND')")
 sw_county
 
+#Header of the shiny dashboard 
+header <- dashboardHeader(title = "Siting Grid-Scale Solar in Pennsylvania")
+
+#Sidebar of the shiny dashboard 
+sidebar <- dashboardSidebar(
+  id = "tabs",
+  #Pages in the sidebar 
+  menuItem("Environmental Resilient Network", tabName = "nature"),
+  menuItem("Abandoned Mine Lands", tabName = "mines")
+)
+
+#Body of the shiny dashboard 
+body <- dashboardBody(
+  tabItems(
+    tabItem("nature"),
+    tabItem("mines")
+    )
+  )
+
+ui <- dashboardPage(header, sidebar, body)
+
+#Defines server logic
+server <- function(input, output, session = session)
+
+#Runs the application 
+shinyApp(ui = ui, server = server)

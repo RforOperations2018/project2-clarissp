@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1771540186",
+    "hash" : "1396426018",
     "id" : "C94D198C",
-    "lastKnownWriteTime" : 1538793710,
-    "last_content_update" : 1538793710,
+    "lastKnownWriteTime" : 1539712629,
+    "last_content_update" : 1539712629391,
     "path" : "~/Documents/GitHub/project1-clarissp/app.R",
     "project_path" : null,
     "properties" : {
-        "cursorPosition" : "8,15",
-        "scrollLine" : "6"
+        "cursorPosition" : "76,49",
+        "scrollLine" : "70"
     },
     "relative_order" : 3,
     "source_on_save" : false,
