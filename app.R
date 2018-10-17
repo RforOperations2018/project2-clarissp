@@ -38,7 +38,9 @@ getEsriList <- function(url) {
     unname()
 }
 
-url <- URLencode("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson?where=%20(COUNTY%20like%20'%25Indiana%25'%20OR%20COUNTY%20like%20'%25Somerset%25'%20OR%20COUNTY%20like%20'%25Greene%25'%20OR%20COUNTY%20like%20'%25Armstrong%25'%20OR%20COUNTY%20like%20'%25Washington%25'%20OR%20COUNTY%20like%20'%25Westmoreland%25'%20OR%20COUNTY%20like%20'%25Beaver%25')%20&geometry={"xmin":-9690178.58343066,"ymin":4758001.876679025,"xmax":-8018347.90077773,"ymax":5124899.612447773,"spatialReference":{"wkid":102100}}")
+url <- URLencode("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson?where=%20(COUNTY%20like%20'%25Indiana%25'%20OR%20COUNTY%20like%20'%25Somerset%25'%20OR%20COUNTY%20like%20'%25Greene%25'%20OR%20COUNTY%20like%20'%25Armstrong%25'%20OR%20COUNTY%20like%20'%25Washington%25'%20OR%20COUNTY%20like%20'%25Westmoreland%25'%20OR%20COUNTY%20like%20'%25Beaver%25')%20&geometry={'xmin':-9690178.58343066,'ymin':4758001.876679025,'xmax':-8018347.90077773,'ymax':5124899.612447773,'spatialReference':{'wkid':102100}}")
+counties <- sort(getEsriList(url))
+
 
 #Reading in Abandoned Mine Lands data from DEP 
 aml <- read.csv("Abandoned_Mine_Land_Inventory_Polygons.csv") 
@@ -76,7 +78,7 @@ sidebar <- dashboardSidebar(
     #Select input for Counties in Permit Map 
     selectInput("counties",
                 "Select a County:",
-                choices = County,
+                choices = counties,
                 selected = "Somerset"),
     
     #Reset button for filters 
@@ -116,7 +118,8 @@ server <- function(input, output, session = session){
         global <- subset(aml, SF_TYPE %in% input$amltype)
       }
     
-    url <- URLencode(paste0("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson?where=%20(COUNTY%20like%20'%25Indiana%25'%20OR%20COUNTY%20like%20'%25Somerset%25'%20OR%20COUNTY%20like%20'%25Greene%25'%20OR%20COUNTY%20like%20'%25Armstrong%25'%20OR%20COUNTY%20like%20'%25Washington%25'%20OR%20COUNTY%20like%20'%25Westmoreland%25'%20OR%20COUNTY%20like%20'%25Beaver%25')%20&geometry={"xmin":-9690178.58343066,"ymin":4758001.876679025,"xmax":-8018347.90077773,"ymax":5124899.612447773,"spatialReference":{"wkid":102100}}"))
+    #URL County query
+    url <- URLencode(paste0("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson?where=%20(COUNTY%20like%20'%25Indiana%25'%20OR%20COUNTY%20like%20'%25Somerset%25'%20OR%20COUNTY%20like%20'%25Greene%25'%20OR%20COUNTY%20like%20'%25Armstrong%25'%20OR%20COUNTY%20like%20'%25Washington%25'%20OR%20COUNTY%20like%20'%25Westmoreland%25'%20OR%20COUNTY%20like%20'%25Beaver%25')%20&geometry={'xmin':-9690178.58343066,'ymin':4758001.876679025,'xmax':-8018347.90077773,'ymax':5124899.612447773,'spatialReference':{'wkid':102100}}"))
     sp <- getEsri(url) %>% 
       spTransform("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
     
@@ -126,7 +129,7 @@ server <- function(input, output, session = session){
   output$permitmap <- renderLeaflet({
     global <- globalInput()
     leaflet() %>% 
-      addPolygons() %>%
+      addPolygons() 
   })
   
   output$amlbar <- renderPlotly({
