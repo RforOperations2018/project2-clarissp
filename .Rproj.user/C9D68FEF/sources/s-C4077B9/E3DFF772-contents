@@ -13,12 +13,15 @@ require(dplyr)
 require(readxl)
 require(stringr)
 require(sf)
+library(ggplot2)
+library(plyr)
+library(knitr)
 ```
 
 ```{r}
 #Importing data for the map
 county <- readOGR("https://data.pa.gov/api/geospatial/xq2b-bzbq?method=export&format=GeoJSON")
-counties_Sw <- subset(county, county_nam %in% ("ALLEGHENY", ))
+counties_Sw <- subset(county, county_nam %in% ("ALLEGHENY"))
 
 ```
 
@@ -35,5 +38,46 @@ plot(mines)
 ```{r}
 resilient  <- readOGR("SouthwestPAResilientNetwork_.geojson")
 plot(resilient)
+```
+
+```{r}
+aml <- read.csv("Abandoned_Mine_Land_Inventory_Polygons.csv")
+amlsubset <- subset(aml, select = c("SF_TYPE", "SF_STATUS_CD", "SF_STATUS", "SF_PRIORITY", "SF_PROBLEM_CODE", "HEIGHT_FT", "VOLUME_CY"))
+amlsubset
+
+ggplot(data = amlsubset, aes(x = SF_PRIORITY, fill = SF_STATUS)) +
+  geom_bar(stat = "count") +
+  labs(title = "Abandoned Mine Lands (AML) in Pennsylvania", 
+       x= "Priority of AML", 
+       y= "Count of AMLs"
+       ) +
+  scale_fill_brewer(palette = "Pastel1") +
+  theme_bw() +
+  theme(plot.title = 
+          element_text(face = "bold", 
+                       family = "American Typewriter"),
+        axis.title.x = 
+          element_text(
+            family = "American Typewriter"
+          ),
+        axis.text.x = 
+          element_text(
+            family = "American Typewriter",
+            angle = 90, 
+            vjust = 0.5
+            ),
+        axis.title.y = 
+          element_text(
+            family = "American Typewriter"
+          ),
+        axis.text.y = 
+          element_text(
+            family = "American Typewriter"
+          ),
+        legend.position = "bottom", 
+        legend.box = "horizontal"
+        ) 
+  
+
 ```
 

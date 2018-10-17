@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1539718905305.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A30624D7",
+    "lastKnownWriteTime" : 0,
+    "last_content_update" : 1539718905305,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "E3ED182A",
+        "caption" : "aml",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=aml&cache_key=E3ED182A",
+        "displayedObservations" : 21805,
+        "environment" : "",
+        "object" : "aml",
+        "preview" : 0,
+        "totalObservations" : 21805,
+        "variables" : 18
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

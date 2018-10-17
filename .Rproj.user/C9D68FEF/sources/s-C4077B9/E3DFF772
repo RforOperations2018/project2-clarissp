@@ -5,15 +5,16 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "522251585",
     "id" : "E3DFF772",
-    "lastKnownWriteTime" : 1539371324,
-    "last_content_update" : 1539371324,
+    "lastKnownWriteTime" : 1539736274,
+    "last_content_update" : 1539736274341,
     "path" : "~/Documents/GitHub/hw3-clarissp/test.Rmd",
     "project_path" : null,
     "properties" : {
-        "cursorPosition" : "6,0",
-        "scrollLine" : "0"
+        "cursorPosition" : "47,0",
+        "last_setup_crc32" : "C4077B96794f31e",
+        "scrollLine" : "46"
     },
     "relative_order" : 4,
     "source_on_save" : false,

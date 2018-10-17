@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1539719331621.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "7A9AB570",
+    "lastKnownWriteTime" : 0,
+    "last_content_update" : 1539719331621,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "276690DD",
+        "caption" : "amlsubset",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=amlsubset&cache_key=276690DD",
+        "displayedObservations" : 21805,
+        "environment" : "",
+        "object" : "amlsubset",
+        "preview" : 0,
+        "totalObservations" : 21805,
+        "variables" : 7
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
