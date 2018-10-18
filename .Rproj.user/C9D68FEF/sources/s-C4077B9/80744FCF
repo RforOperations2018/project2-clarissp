@@ -2,18 +2,18 @@
     "collab_server" : "",
     "contents" : "",
     "created" : 1539462367979.000,
-    "dirty" : false,
+    "dirty" : true,
     "encoding" : "UTF-8",
     "folds" : "",
     "hash" : "0",
     "id" : "80744FCF",
-    "lastKnownWriteTime" : 1539807124,
-    "last_content_update" : 1539807124611,
+    "lastKnownWriteTime" : 1539897805,
+    "last_content_update" : 1539898131892,
     "path" : "~/Documents/GitHub/project2-clarissp/app.R",
     "project_path" : "app.R",
     "properties" : {
-        "cursorPosition" : "39,0",
-        "scrollLine" : "27"
+        "cursorPosition" : "33,10",
+        "scrollLine" : "16"
     },
     "relative_order" : 1,
     "source_on_save" : false,

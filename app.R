@@ -26,20 +26,29 @@ require(jsonlite)
 #sw_county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json?$where=county_nam in('ALLEGHENY', 'ARMSTRONG','BEAVER','BUTLER','CAMBRIA','FAYETTE','GREENE','INDIANA','LAWERENCE','SOMERSET','WASHINGTION','WESTMORELAND')")
 #sw_county
 
-getEsri <- function(url) {
-  g <- GET(URLencode(url))
-  c <- content(g)
-}
+#getEsri <- function(url) {
+  #g <- GET(URLencode(url))
+  #c <- content(g)
+#}
 
-getEsriList <- function(url) {
-  g <- GET(URLencode(url))
-  fromJSON(content(g))$features %>% 
-    unlist() %>%
-    unname()
-}
+#getEsriList <- function(url) {
+  #g <- GET(URLencode(url))
+  #fromJSON(content(g))$features %>% 
+    #unlist() %>%
+    #unname()
+#}
 
-url <- URLencode("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson?where=%20(COUNTY%20like%20'%25Indiana%25'%20OR%20COUNTY%20like%20'%25Somerset%25'%20OR%20COUNTY%20like%20'%25Greene%25'%20OR%20COUNTY%20like%20'%25Armstrong%25'%20OR%20COUNTY%20like%20'%25Washington%25'%20OR%20COUNTY%20like%20'%25Westmoreland%25'%20OR%20COUNTY%20like%20'%25Beaver%25')%20&geometry={'xmin':-9690178.58343066,'ymin':4758001.876679025,'xmax':-8018347.90077773,'ymax':5124899.612447773,'spatialReference':{'wkid':102100}}")
-counties <- sort(getEsriList(url))
+#url <- URLencode("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson")
+#counties <- sort(getEsriList(url))
+
+
+permits <- readOGR("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson")
+tnc <- readOGR("PA_Counties_clip.shp")
+plot(keep.tnc)
+
+swcounty <- c("Armstrong", "Allegheny", "Beaver", "Cambria", "Fayette", "Greene", "Indiana", "Somerset", "Washington", "Westmoreland")
+tnc_swcounty <- tnc[tnc$NAME %in% swcounty,]
+plot(tnc_swcounty)
 
 
 #Reading in Abandoned Mine Lands data from DEP 
@@ -58,6 +67,7 @@ sidebar <- dashboardSidebar(
     menuItem("Resilient Network", icon = icon("leaf"), tabName = "nature"),
     menuItem("Abandoned Mine Lands", icon = icon("globe"), tabName = "mines"),
     menuItem("Abandoned Mine Lands Dataset", icon = icon("database"),tabName = "minetable"),
+    menuItem("Active Underground Permit Map", tabName = "permit"),
     
     #Select input for Type of AMLs
     selectInput("amltype",
@@ -78,7 +88,7 @@ sidebar <- dashboardSidebar(
     #Select input for Counties in Permit Map 
     selectInput("counties",
                 "Select a County:",
-                choices = counties,
+                choices = swcounty,
                 selected = "Somerset"),
     
     #Reset button for filters 
@@ -101,7 +111,11 @@ body <- dashboardBody(
             fluidPage(
               box(title = "Abandoned Mine Land Dataset", DT::dataTableOutput("amltable"), width = 12)
               )
-            )
+            ),
+    tabItem("permit",
+            fluidPage(
+              leafletOutput("permitmap")
+            ))
     )
   )
 
@@ -118,10 +132,9 @@ server <- function(input, output, session = session){
         global <- subset(aml, SF_TYPE %in% input$amltype)
       }
     
-    #URL County query
-    url <- URLencode(paste0("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson?where=%20(COUNTY%20like%20'%25Indiana%25'%20OR%20COUNTY%20like%20'%25Somerset%25'%20OR%20COUNTY%20like%20'%25Greene%25'%20OR%20COUNTY%20like%20'%25Armstrong%25'%20OR%20COUNTY%20like%20'%25Washington%25'%20OR%20COUNTY%20like%20'%25Westmoreland%25'%20OR%20COUNTY%20like%20'%25Beaver%25')%20&geometry={'xmin':-9690178.58343066,'ymin':4758001.876679025,'xmax':-8018347.90077773,'ymax':5124899.612447773,'spatialReference':{'wkid':102100}}"))
-    sp <- getEsri(url) %>% 
-      spTransform("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+    if (length(input$counties) > 0 ) {
+      global <- subset(tnc_swcounty, NAME %in% input$counties)
+    }
     
     return(global)
   })
@@ -129,7 +142,12 @@ server <- function(input, output, session = session){
   output$permitmap <- renderLeaflet({
     global <- globalInput()
     leaflet() %>% 
-      addPolygons() 
+      addPolygons(data = tnc_swcounty,
+                  weight = 2,
+                  color = "black") %>%
+      addPolygons(data = permits,
+                  weight = 1.5,
+                  color = "blue")  
   })
   
   output$amlbar <- renderPlotly({
