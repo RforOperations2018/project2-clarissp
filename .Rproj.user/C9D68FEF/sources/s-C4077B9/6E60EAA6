@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1539900752815.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6E60EAA6",
+    "lastKnownWriteTime" : 1539901145,
+    "last_content_update" : 1539901145357,
+    "path" : "~/Documents/GitHub/Class_14-API-Supplement/API/app.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "71,0",
+        "scrollLine" : "58"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

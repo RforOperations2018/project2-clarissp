@@ -15,44 +15,24 @@ require(RSocrata)
 require(httr)
 require(jsonlite)
 
-#Importing token for the API 
-#token <- jsonlite::fromJSON("token.json")$token
+#Shapefile for County Boundaries 
+pacounty <- readOGR("PA_Counties_clip.shp")
 
-#Reading in the county boundaries for all of PA using the SODA API 
-#county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json")
-
-
-#Subset the counties for the 10 Southwest county region that I need
-#sw_county <- read.socrata("https://data.pa.gov/resource/n96m-gp6j.json?$where=county_nam in('ALLEGHENY', 'ARMSTRONG','BEAVER','BUTLER','CAMBRIA','FAYETTE','GREENE','INDIANA','LAWERENCE','SOMERSET','WASHINGTION','WESTMORELAND')")
-#sw_county
-
-#getEsri <- function(url) {
-  #g <- GET(URLencode(url))
-  #c <- content(g)
-#}
-
-#getEsriList <- function(url) {
-  #g <- GET(URLencode(url))
-  #fromJSON(content(g))$features %>% 
-    #unlist() %>%
-    #unname()
-#}
-
-#url <- URLencode("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson")
-#counties <- sort(getEsriList(url))
-
-
-permits <- readOGR("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson")
-tnc <- readOGR("PA_Counties_clip.shp")
-plot(keep.tnc)
-
+#Subsetting counties to Southwest counties 
 swcounty <- c("Armstrong", "Allegheny", "Beaver", "Cambria", "Fayette", "Greene", "Indiana", "Somerset", "Washington", "Westmoreland")
-tnc_swcounty <- tnc[tnc$NAME %in% swcounty,]
-plot(tnc_swcounty)
+pa_swcounty <- pacounty[pacounty$NAME %in% swcounty,]
 
+#API for the Permit data 
+permits <- readOGR("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson")
+
+#API for Environmental Good Samaritan Act points 
+goodact <- readOGR("http://data-padep-1.opendata.arcgis.com/datasets/f5487b2bd296492097994a8ab5bd4c9b_261.geojson")
+
+#Creating county column for Environmental Good Samaritan Act points (goodact)
+goodact$county <- over(goodact, pa_swcounty, fn = NULL)
 
 #Reading in Abandoned Mine Lands data from DEP 
-aml <- read.csv("Abandoned_Mine_Land_Inventory_Polygons.csv") 
+#aml <- read.csv("Abandoned_Mine_Land_Inventory_Polygons.csv") 
 #amlsubset <- subset(aml, select = c("SF_TYPE", "SF_STATUS_CD", "SF_STATUS", "SF_PRIORITY", "SF_PROBLEM_CODE", "HEIGHT_FT", "VOLUME_CY"))
 #amlsubset
 
@@ -64,10 +44,9 @@ sidebar <- dashboardSidebar(
   sidebarMenu(
     id = "tabs",
     #Pages in the sidebar 
-    menuItem("Resilient Network", icon = icon("leaf"), tabName = "nature"),
-    menuItem("Abandoned Mine Lands", icon = icon("globe"), tabName = "mines"),
-    menuItem("Abandoned Mine Lands Dataset", icon = icon("database"),tabName = "minetable"),
-    menuItem("Active Underground Permit Map", tabName = "permit"),
+    menuItem("Active Underground Permits", icon = icon("globe"), tabName = "mines"),
+    menuItem("Dataset", icon = icon("database"),tabName = "minetable"),
+    menuItem("Map", tabName = "globe"),
     
     #Select input for Type of AMLs
     selectInput("amltype",
@@ -133,7 +112,7 @@ server <- function(input, output, session = session){
       }
     
     if (length(input$counties) > 0 ) {
-      global <- subset(tnc_swcounty, NAME %in% input$counties)
+      global <- subset(pa_swcounty, NAME %in% input$counties)
     }
     
     return(global)
@@ -142,12 +121,20 @@ server <- function(input, output, session = session){
   output$permitmap <- renderLeaflet({
     global <- globalInput()
     leaflet() %>% 
-      addPolygons(data = tnc_swcounty,
+      addPolygons(data = pa_swcounty,
                   weight = 2,
                   color = "black") %>%
       addPolygons(data = permits,
                   weight = 1.5,
-                  color = "blue")  
+                  color = "blue") %>%
+      #addMarkers(data = goodact) %>%
+      addProviderTiles("Esri.WorldGrayCanvas", group = "Gray Canvas", options = providerTileOptions(noWrap = TRUE)) %>%
+      addProviderTiles("CartoDB.DarkMatterNoLabels", group = "Dark Matter", options = providerTileOptions(noWrap = TRUE)) %>%
+      addProviderTiles("Esri.WorldTopoMap", group = "Topography", options = providerTileOptions(noWrap = TRUE)) %>%
+      addLayersControl(
+        baseGroups = c("Gray Canvas", "Dark Matter", "Topography"),
+        options = layersControlOptions(collapsed = TRUE)
+      ) 
   })
   
   output$amlbar <- renderPlotly({
@@ -186,6 +173,16 @@ server <- function(input, output, session = session){
       )
   })
   
+  permits <- reactive({
+    filter <- ifelse(length(input$counties) > 0, 
+                           paste0("COUNTY+IN%+(%27", paste(input$counties, collapse = "%27,%27"),"%27)"),
+                           "")
+    #url <- paste0("http://www.depgis.state.pa.us/arcgis/rest/services/emappa/eMapPA_External_Extraction/MapServer/48/query?where=", filter, "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentsOnly=false&datumTransformation=&parameterValues=&rangeValues=&f=pjson")
+    
+    url <- paste0("http://www.depgis.state.pa.us/arcgis/rest/services/emappa/eMapPA_External_Extraction/MapServer/48/query?where=COUNTY+IN+%28%27Armstrong%27%2C+%27Beaver%27%2C+%27Cambria%27%2C+%27Greene%27%2C+%27Indiana%27%2C+%27Somerset%27%2C+%27Washington%27%2C+%27Westmoreland%27%29",filter, "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentsOnly=false&datumTransformation=&parameterValues=&rangeValues=&f=pjson")
+    permits <- readOGR(url)
+  })
+  
   output$amltable <- DT::renderDataTable({
     subset(globalInput(), select = c("SF_TYPE", "SF_STATUS_CD", "SF_STATUS", "SF_PRIORITY", "SF_PROBLEM_CODE", "HEIGHT_FT", "VOLUME_CY"))
     })
@@ -193,6 +190,7 @@ server <- function(input, output, session = session){
   observeEvent(input$reset, {
     updateSelectInput(session, "amltype", selected = c("Coal Deep Mine", "Coal Surface Mine"))
     updateSliderInput(session, "height", value = c(min(aml$HEIGHT_FT, na.rm = T), max(aml$HEIGHT_FT, na.rm = T)))
+    updateSelectInput(session, "counties", selected = c("Somerset"))
     showNotification("You have successfully reset the filters", type = "message")
   })
 }
