@@ -1,0 +1,82 @@
+﻿PERMIT,MINE,OPERATOR,TYPE,STATUS,COAL_SEAM,COUNTY,SHAPEAREA,SHAPELEN,OBJECTID
+03981301,Parkwood,"Western Allegheny Energy, LLC",Room and Pillar,Active,Upper Freeport,Armstrong,26135234.0003286,26533.0427517977,413304
+56101301,A Seam Deep Mine,"PBS Coals, Inc",Room and Pillar,Pending,Brookville,Somerset,21870281.7808901,37083.7958100852,413305
+30101302,Garards Fort,"Dana Mining Co. of PA, LLC",Room and Pillar,Active,Sewickley,Greene,9485609.0040991,23720.6819603054,413306
+56961301,Sarah,RoxCoal,Room and Pillar,Active,Upper Kittanning,Somerset,6294857.35079428,12865.7969826214,413307
+56111301,Cass No 1,"LCT Energy, LP",Room and Pillar,Active,Lower Freeport,Somerset,3651850.45012747,8951.53933223733,413308
+56111303,Maple Springs,"LCT Energy, LP",Room and Pillar,Active,Lower Kittanning,Somerset,27021275.5888167,38556.6230696411,413309
+32041301,Brush Valley,Rosebud Mining Company,Room and Pillar,Active,Lower Kittanning,Indiana,31546526.8049993,36212.1121982167,413310
+56081301,Brubaker,"LCT Energy, LC",Room and Pillar,Active,Lower Kittanning,Somerset,5264436.01835375,14889.3693600061,413302
+56121301,North Fork,AK Coal Resources,Room and Pillar,Active,Middle Kittanning,Indiana,31742029.598377,44353.5633810955,413341
+30121301,Harvey,Consol Pennsylvania Coal Co,Longwall,Pending,Pittsburgh,Greene,20237612.8674663,19225.1510670507,413342
+30841317,Enlow Fork,CONSOL PA Coal Co,Longwall,Pending,Pittsburgh,Greene,25828385.2067954,22900.4180924058,413343
+56111302,Acosta Deep Mine,Wilson Creek Energy LLC,Room and Pillar,Active,Middle Kittanning,Somerset,19315860.8316244,29941.8414553884,413344
+56111301,Cass No 1,"LCT Energy, LP",Room and Pillar,Pending,Upper Freeport,Somerset,9694757.78286562,21391.7200076531,413345
+26131301,Keyser Deep Mine,Wilson Creek Energy LLC,Room and Pillar,Active,Lower Kittanning,Somerset,28122136.6797804,28833.8804318696,413346
+30831303,Cumberland,"Cumberland Contura, LLC",Longwall,Pending,Pittsburgh,Greene,11945747.2529165,17253.1458244227,413347
+30831303,Cumberland,"Cumberland Contura, LLC",Longwall,Pending,Pittsburgh,Greene,5444764.0247158,13016.4096330776,413348
+30841316,Bailey Mine,CONSOL PA Coal Co,Longwall,Pending,Pittsburgh,Greene,32266943.6140125,26499.912280758,413349
+56841328,Mine 78,Rosebud Mining,Room and Pillar,Pending,Upper Kittanning,Somerset,15669420.7776902,28408.010890388,413350
+56111302,Acosta Deep Mine,Wilson Creek Energy LLC,Room and Pillar,Pending, ,Somerset,18739155.8621071,25881.346382298,413351
+03991301,Logansport,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Armstrong,89043380.6217157,52717.0583463001,413262
+30841317,Enlow Fork,CONSOL PA Coal Co,Longwall,Active,Pittsburgh,Greene,290121505.836596,90055.6996202198,413263
+30841312,Monongalia County Mine,Monongalia County Coal Company,Longwall,Active,Pittsburgh,Greene,209076081.215287,74109.1941013573,413264
+32951301,Toms Run,Rosebud Mining,Room and Pillar,Active,Upper Freeport,Indiana,30290420.6975508,36629.3110063009,413265
+32991301,Nolo,Rosebud Mining Company,Room and Pillar,Active,Lower Kittanning,Indiana,51825988.9864766,42379.4018096755,413266
+32981301,North Branch,RoxCoal,Room and Pillar,Active,Lower Kittanning,Indiana,19301769.3589979,28080.1590344381,413267
+11031301,Madison,Rosebud Mining,Room and Pillar,Active,Upper Freeport,Cambria,77339345.6947182,49049.3039266173,413271
+32961302,Ondo,"Amfire Mining Company, LLC",Room and Pillar,Active,Lower Kittanning,Indiana,18962434.6282792,39370.8700627155,413311
+56981301,Quecreek No 1,Quecreek Mining Inc,Room and Pillar,Active,Upper Kittanning,Somerset,33929951.6272778,31675.1605635018,413312
+03961301,Tracy Lynne,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Armstrong,46407513.4621322,51120.4773976091,413313
+11051301,Cresson,AMFIRE Mining,Room and Pillar,Active,Upper Freeport,Cambria,20680133.2860854,27651.3765902933,413314
+32061301,Starford,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Indiana,32449196.4793342,43315.857158738,413315
+63831302,Washington County Mine,Washington County Coal Company,Longwall,Active,Pittsburgh,Washington,311428994.724111,116330.58256972,413316
+56971301,Geronimo,RoxCoal Inc.,Room and Pillar,Active,Lower Kittanning,Somerset,31981255.4636991,49490.0116658369,413317
+04971301,Beaver Valley,Rosebud Mining,Room and Pillar,Active,Upper Freeport,Beaver,18387376.2038711,23784.2444997443,413318
+17041301,Penfield,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Clearfield,39285679.3742411,35245.6343223341,413272
+56021301,Roytown,Elk Lick Energy,Room and Pillar,Active,Upper Kittanning,Somerset,8664078.22496917,14451.8361117831,413273
+56841328,Mine 78,Rosebud Mining,Room and Pillar,Active,Upper Kittanning,Somerset,60051377.2243621,41389.5184855209,413274
+03871303,Darmac 2,Rosebud Mining,Room and Pillar,Active,Upper Freeport,Armstrong,19922178.3927753,30772.5357884643,413275
+03061301,Heilwood,Rosebud Mining,Room and Pillar,Active,Brookville,Indiana,61354129.6812239,36581.9484640788,413276
+03061301,TJS No 6,Rosebud Mining,Room and Pillar,Active,Upper Freeport,Armstrong,10921145.3672893,17774.1792555578,413277
+17071301,Harmony,Rosebud Mining,Room and Pillar,Active,Upper Kittanning,Clearfield,26382964.8185968,21435.0563411636,413278
+33071301,Kocjancic,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Jefferson,12426493.9187987,20920.3066047697,413279
+56061301,Kimberly Run,Rox Coal,Room and Pillar,Active,Lower Kittanning,Somerset,19933268.6417929,35857.781752574,413319
+32131303,Crooked Creek,Rosebud Mining Company,Room and Pillar,Active,Upper Freeport,Indiana,47105641.0167053,33204.7901691504,413320
+32011302,Gillhouser Run,AMFIRE Mining,Room and Pillar,Active,Lower Freeport,Indiana,18730314.03102,26736.3253373782,413322
+32061301,Starford,Rosebud Mining,Room and Pillar,Active,Middle Kittanning,Indiana,32449196.4793342,43315.857158738,413323
+30841314,Titus,Dana Mining,Room and Pillar,Active,Sewickley,Greene,3278559.13327715,13856.267903896,413324
+32031301,Lowry Deep,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Indiana,40252490.5351784,41220.9224428693,413325
+32971302,Dutch Run,Rosebud Mining,Room and Pillar,Active,Upper Freeport,Indiana,39212000.8497933,37240.3580227805,413326
+32061302,Knob Creek,"Western Allegheny Energy, LLC",Room and Pillar,Active,Upper Kittanning,Indiana,44888215.682858,31316.4147875425,413327
+03071301,Long Run,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Armstrong,27560701.8093927,29086.6363510488,413280
+56071301,Horning,RoxCoal Inc.,Room and Pillar,Active,Lower Freeport,Somerset,17575082.0690377,22041.4840988476,413281
+30071301,Freeport,"Freeport Mining, LLC",Longwall,Active,Upper Freeport,Greene,35319349.9830751,29611.5345819177,413282
+30081302,Prime No 1,Dana Mining,Room and Pillar,Active,Sewickley,Greene,3211282.01203747,12297.273137996,413283
+32081301,Coral-Graceton,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Indiana,8450827.7095975,16132.7186531037,413284
+30831303,Cumberland,"Cumberland Contura, LLC",Longwall,Pending,Pittsburgh,Greene,64812567.8260776,36212.3717944065,413285
+63981301,Ohio County Mine,The Ohio County Coal Company,Longwall,Active,Pittsburgh,Washington,3393091.75786535,11869.2334004116,413286
+30841307,Emerald 1,"Emerald Coal Resources, LP",Longwall,Active,Pittsburgh,Greene,164270267.76144,95438.3503189286,413287
+03091301,TJS No 7,TJS Mining,Room and Pillar,Active,Upper Freeport,Armstrong,5069484.95846084,12209.5303774301,413289
+65091301,Kingston-West,C&D Coal Co.,Room and Pillar,Active,Upper Freeport,Westmoreland,6974128.50323659,14559.6548457094,413290
+56091301,Stonycreek,Rosebud Mining,Room and Pillar,Active,Upper Kittanning,Somerset,9264081.93127248,20601.2139673921,413291
+32061302,Knob Creek,"Western Allegheny Energy, LLC",Room and Pillar,Active,Upper Freeport,Indiana,24844828.4909182,26633.9239113674,413328
+17031301,Cherry Tree,Rosebud Mining,Room and Pillar,Active,Upper Freeport,Clearfield,38627086.3955485,41129.0339956297,413329
+65131301,Rustic Ridge 1,"LCT Energy, LP",Room and Pillar,Active,Lower Kittanning,Westmoreland,20377747.2909179,35049.5606951184,413330
+32051301,Barrett Deep,"Amfire Mining Company, LLC",Room and Pillar,Active,Lower Kittanning,Indiana,24101487.882257,28112.9637842968,413331
+56131302,Polaris,AK Coal Resources,Room and Pillar,Active,Lower Kittanning,Somerset,19623199.9276697,23508.35729282,413332
+03061301,Heilwood,Rosebud Mining,Room and Pillar,Active,Lower Kittanning,Indiana,61354129.6812239,36581.9484640788,413333
+32131303,Crooked Creek,Rosebud Mining Company,Room and Pillar,Active,Upper Kittanning,Indiana,47105641.0167053,33204.7901691504,413334
+30831303,Cumberland,"Cumberland Contura, LLC",Longwall,Active,Pittsburgh,Greene,203843341.138868,92712.8019438626,413335
+30121301,Harvey,Consol Pennsylvania Coal Co,Longwall,Active,Pittsburgh,Greene,77486900.95326,48919.0305720869,413336
+63131301,Ram No. 1,"RAM Mining, LLC",Room and Pillar,Pending,Pittsburgh,Washington,9242615.88130532,19450.29955263,413337
+63921301,High Quality,UMCO Energy,Room and Pillar,Active,Pittsburgh,Washington,12104917.4497458,26468.8369114652,413338
+63091301,Tunnel Ridge,"Tunnel Ridge, LLC",Room and Pillar,Active,Pittsburgh,Washington,25520948.9053788,30110.0348582957,413339
+63091301,Tunnel Ridge,"Tunnel Ridge, LLC",Room and Pillar,Pending,Pittsburgh,Washington,567682.682780875,3061.1975066783,413340
+30001301,Crawdad Portal B,Dana Mining,Room and Pillar,Active,Sewickley,Greene,8875292.55655598,17384.1256856048,413299
+03851303,Clementine,McVille Mining,Room and Pillar,Active,Lower Kittanning,Armstrong,75630444.6387429,61618.3655981509,413292
+32881301,Penn Run,"Amfire Mining Company, LLC",Room and Pillar,Active,Upper Freeport,Indiana,17568481.4365542,34188.985639178,413294
+11991301,Twin Rocks,Rosebud Mining,Room and Pillar,Active,Lower Freeport,Cambria,24006510.076931,33603.5502510578,413295
+30841316,Bailey Mine,CONSOL PA Coal Co,Longwall,Active,Pittsburgh,Greene,275322985.478504,102062.645142023,413297
+30101301,CW Morgan,CWMM LLC,Room and Pillar,Active,Pittsburgh,Greene,19485122.4830211,38343.9316012221,413298
+33971301,Dora 8,AMFIRE Mining,Room and Pillar,Active,Lower Kittanning,Jefferson,20153212.3383141,19962.3594524313,413300

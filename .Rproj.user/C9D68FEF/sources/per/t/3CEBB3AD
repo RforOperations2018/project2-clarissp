@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1539973690121.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3CEBB3AD",
+    "lastKnownWriteTime" : 8316303949672164608,
+    "last_content_update" : 1539973690121,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "5541F4A3",
+        "caption" : "permitdata",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=permitdata&cache_key=5541F4A3",
+        "displayedObservations" : 81,
+        "environment" : "",
+        "object" : "permitdata",
+        "preview" : 0,
+        "totalObservations" : 81,
+        "variables" : 10
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
