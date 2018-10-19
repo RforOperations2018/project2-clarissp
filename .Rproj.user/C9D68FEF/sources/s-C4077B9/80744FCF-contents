@@ -21,6 +21,9 @@ pacounty <- readOGR("PA_Counties_clip.shp")
 #Subsetting counties to Southwest counties 
 swcounty <- c("Armstrong", "Allegheny", "Beaver", "Cambria", "Fayette", "Greene", "Indiana", "Somerset", "Washington", "Westmoreland")
 pa_swcounty <- pacounty[pacounty$NAME %in% swcounty,]
+proj4string(pa_swcounty) <- CRS("+proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0")
+pa_swcounty <- spTransform(pa_swcounty, CRS=CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+
 
 #API for the Permit data 
 permits <- readOGR("http://data-padep-1.opendata.arcgis.com/datasets/cea4b401782a4178b139c6b5c6a929f2_48.geojson")
@@ -46,7 +49,7 @@ sidebar <- dashboardSidebar(
     #Pages in the sidebar 
     menuItem("Active Underground Permits", icon = icon("globe"), tabName = "mines"),
     menuItem("Dataset", icon = icon("database"),tabName = "minetable"),
-    menuItem("Map", tabName = "globe"),
+    menuItem("Map", tabName = "permit"),
     
     #Select input for Type of AMLs
     selectInput("amltype",
@@ -119,7 +122,7 @@ server <- function(input, output, session = session){
   })
   
   output$permitmap <- renderLeaflet({
-    global <- globalInput()
+    permits <- permits()
     leaflet() %>% 
       addPolygons(data = pa_swcounty,
                   weight = 2,
@@ -127,7 +130,7 @@ server <- function(input, output, session = session){
       addPolygons(data = permits,
                   weight = 1.5,
                   color = "blue") %>%
-      #addMarkers(data = goodact) %>%
+      addMarkers(data = goodact) %>%
       addProviderTiles("Esri.WorldGrayCanvas", group = "Gray Canvas", options = providerTileOptions(noWrap = TRUE)) %>%
       addProviderTiles("CartoDB.DarkMatterNoLabels", group = "Dark Matter", options = providerTileOptions(noWrap = TRUE)) %>%
       addProviderTiles("Esri.WorldTopoMap", group = "Topography", options = providerTileOptions(noWrap = TRUE)) %>%
@@ -143,7 +146,7 @@ server <- function(input, output, session = session){
       geom_bar(stat = "count") +
       labs(title = "Abandoned Mine Lands (AML) in Pennsylvania", 
            x= "Priority of AML", 
-           y= "Count of AMLs"
+           y= "Count of AMLs", fill = "Status"
       ) +
       scale_fill_brewer(palette = "Pastel1") +
       theme_bw() +
