@@ -1,3 +1,5 @@
+#Project 2 
+
 require(shiny)
 require(rgdal)
 require(leaflet)
@@ -36,59 +38,83 @@ permitdata <- read.csv("Active_Underground_Permit_Boundaries.csv")
 sw_permitdata <- filter(permitdata, COUNTY == "Armstrong" | COUNTY == "Beaver" | COUNTY == "Cambria" | COUNTY == "Greene" | COUNTY ==  "Indiana" | COUNTY == "Somerset" | COUNTY ==  "Washington" | COUNTY == "Westmoreland")
 
 #API for Environmental Good Samaritan Act points 
-goodact <- readOGR("http://data-padep-1.opendata.arcgis.com/datasets/f5487b2bd296492097994a8ab5bd4c9b_261.geojson")
+surfacemine <- readOGR("http://data-padep-1.opendata.arcgis.com/datasets/67ed627a525548d5900c1b6964b8e619_25.geojson")
+
+getEsri <- function(url) {
+  # Make Call
+  g <- GET(URLencode(url))
+  c <- content(g)
+  readOGR(c)
+}
 
 #Creating county column for Environmental Good Samaritan Act points (goodact)
-goodact$county <- over(goodact, pa_swcounty, fn = NULL)
+surfacemine$county <- over(surfacemine, pa_swcounty, fn = NULL)
 
 #Header of the shiny dashboard 
-header <- dashboardHeader(title = "Siting Grid-Scale Solar in Pennsylvania")
+header <- dashboardHeader(title = "Permits in Pennsylvania")
 
 #Sidebar of the shiny dashboard 
 sidebar <- dashboardSidebar(
   sidebarMenu(
     id = "tabs",
     #Pages in the sidebar 
-    menuItem("Active Underground Permits", icon = icon("globe"), tabName = "activepermit"),
+    menuItem("Graphs", icon = icon("pie-chart"), tabName = "activepermit"),
     menuItem("Dataset", icon = icon("database"),tabName = "permittable"),
-    menuItem("Map", tabName = "permit"),
+    menuItem("Map", icon= icon("map-o"), tabName = "permit"),
     
     #Select input for Type of Permits
-    selectInput("permittype",
+    selectInput("type",
                 "Permit Type(s):",
                 choices = sort(unique(sw_permitdata$TYPE)),
                 multiple = TRUE,
                 selected = c("Room and Pillar")
                 ),
     
-    #Select input for Counties in Permit Map 
+    #Select input for Counties of Permits 
     selectInput("counties",
                 "Select a County:",
-                choices = swcounty,
-                selected = "Somerset"),
+                choices = sort(unique(sw_permitdata$COUNTY)),
+                multiple = TRUE,
+                selected = c("Cambria","Somerset")),
+    #Select input for Status of Permits 
+    selectInput("operator",
+                "Operator(s) of Permit:",
+                choices = sort(unique(sw_permitdata$OPERATOR)),
+                multiple = TRUE,
+                selected = "Rosebud Mining"),
     
     #Reset button for filters 
     actionButton("reset", "Reset Filters", icon = icon("refresh"))
   )
-
 )
 
 #Body of the shiny dashboard 
 body <- dashboardBody(
   tabItems(
     tabItem("activepermit",
-            fluidRow(
-              width = 12,
-              tabPanel("Bar Plot", plotlyOutput("permitbar"))
+            fluidPage(
+              box(tabPanel("Bar Plot", plotlyOutput("permitbar")), width = 12),
+              box(tabPanel("Pie Chart", plotlyOutput("permitpie")), width = 12)
               )
+            
             ),
     tabItem("permittable",
             fluidPage(
+              inputPanel(
+                downloadButton("downloadData", "Download Active Permit Data")
+              ),
               box(title = "Abandoned Mine Land Dataset", DT::dataTableOutput("permittable"), width = 12)
               )
             ),
     tabItem("permit",
-            fluidPage(
+            fluidRow(
+              box(
+                selectInput("facility",
+                            "Type of Facility for Markers:",
+                            choices = sort(unique(surfacemine$features$attributes$PRIMARY_FACILITY_KIND)),
+                            multiple = TRUE,
+                            selected = "GROWING GREENER")
+              ),
               box(title = "Active Permits in Southwest PA", leafletOutput("permitmap"), width = 12)
             ))
     )
@@ -98,23 +124,22 @@ ui <- dashboardPage(header, sidebar, body, skin = "black")
 
 #Defines server logic
 server <- function(input, output, session = session){
-  #Reactive function for all pages (global inputs)
-  globalInput <- reactive({
-    global <- sw_permitdata %>%
-             
-      if (length(input$permittype) > 0 ) {
-        global <- subset(sw_permitdata, TYPE %in% input$permittype)
+  #Reactive function for permit types 
+  permitInput <- reactive({
+      if(length(input$type) > 0 ){
+        sw_permitdata <- subset(sw_permitdata, TYPE %in% input$type)
       }
-    
-    if (length(input$counties) > 0 ) {
-      global <- subset(pa_swcounty, NAME %in% input$counties)
-    }
-    
-    return(global)
+      if(length(input$counties) > 0 ){
+        sw_permitdata <- subset(sw_permitdata, COUNTY %in% input$counties)
+      }
+      if(length(input$operator) > 0 ){
+      sw_permitdata <- subset(sw_permitdata, OPERATOR %in% input$operator)
+      }
+    return(sw_permitdata)
   })
   
   output$permitmap <- renderLeaflet({
-    permits <- permits()
+    facilitymarker <- facilityInput()
     leaflet() %>% 
       addPolygons(data = pa_swcounty,
                   weight = 2,
@@ -122,7 +147,7 @@ server <- function(input, output, session = session){
       addPolygons(data = permits,
                   weight = 1.5,
                   color = "blue") %>%
-      addMarkers(data = goodact) %>%
+      addMarkers(data = facilitymarker) %>%
       addProviderTiles("Esri.WorldGrayCanvas", group = "Gray Canvas", options = providerTileOptions(noWrap = TRUE)) %>%
       addProviderTiles("CartoDB.DarkMatterNoLabels", group = "Dark Matter", options = providerTileOptions(noWrap = TRUE)) %>%
       addProviderTiles("Esri.WorldTopoMap", group = "Topography", options = providerTileOptions(noWrap = TRUE)) %>%
@@ -133,16 +158,16 @@ server <- function(input, output, session = session){
   })
   
   output$permitpie <- renderPlotly({
-    plot_ly(data = data.frame(sw_permitdata), labels = permits$COUNTY, type = 'pie',
+    permit <- permitInput()
+    plot_ly(data = permit, labels = permit$COUNTY, type = 'pie',
             textposition = 'inside',
             textinfo = 'label+percent', insidetextfont = list(color = '#FFFFFF'),
-            hoverinfo = 'label+percent', showlegend = TRUE) 
-    
+            hoverinfo = 'label+percent', showlegend = TRUE)
   })
   
   output$permitbar <- renderPlotly({
-    global <- globalInput()
-    ggplot(data = sw_permitdata, aes(x = COUNTY, fill = STATUS)) +
+    permit <- permitInput() 
+    ggplot(data = permit, mapping = aes(x = COUNTY, fill = STATUS)) +
       geom_bar(stat = "count") +
       labs(title = "Active Underground Permits in Pennsylvania", 
            x= "County", 
@@ -160,7 +185,7 @@ server <- function(input, output, session = session){
             axis.text.x = 
               element_text(
                 family = "American Typewriter",
-                angle = 90, 
+                angle = 45, 
                 vjust = 0.5
               ),
             axis.title.y = 
@@ -176,25 +201,41 @@ server <- function(input, output, session = session){
       )
   })
   
-  permits <- reactive({
-    filter <- ifelse(length(input$counties) > 0, 
-                           paste0("COUNTY+IN%+(%27", paste(input$counties, collapse = "%27,%27"),"%27)"),
-                           "")
-    url <- paste0("http://www.depgis.state.pa.us/arcgis/rest/services/emappa/eMapPA_External_Extraction/MapServer/48/query?where=COUNTY+IN+%28%27Armstrong%27%2C+%27Beaver%27%2C+%27Cambria%27%2C+%27Greene%27%2C+%27Indiana%27%2C+%27Somerset%27%2C+%27Washington%27%2C+%27Westmoreland%27%29",filter, "&text=&objectIds=&time=&geometry=&geometryType=esriGeometryPolygon&inSR=&spatialRel=esriSpatialRelWithin&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentsOnly=false&datumTransformation=&parameterValues=&rangeValues=&f=pjson")
-    permits <- readOGR(url)
+  output$permittable <- DT::renderDataTable({
+    subset(permitInput(), select = c("MINE", "OPERATOR", "TYPE", "STATUS", "COAL_SEAM", "COUNTY"))
   })
   
-  output$permittable <- DT::renderDataTable({
-    subset(globalInput(), select = c("MINE", "OPERATOR", "TYPE", "STATUS", "COAL_SEAM", "COUNTY"))
-    })
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("sw_permitdata", Sys.Date(), ".csv", sep="")
+    },
+    content = function(file) {
+      write.csv(permitInput(), file) 
+    }
+  )
   
   observeEvent(input$reset, {
-    updateSelectInput(session, "permittype", selected = c("Room and Pillar"))
-    updateSelectInput(session, "counties", selected = c("Somerset"))
+    updateSelectInput(session, "type", selected = c("Room and Pillar"))
+    updateSelectInput(session, "counties", selected = c("Cambria","Somerset"))
+    updateSelectInput(session, "coal", selected = c("Pittsburgh"))
     showNotification("You have successfully reset the filters", type = "message")
   })
-}
   
+  facilityInput <- reactive({
+    #filter <- ifelse(length(input$facility) > 0, 
+                           #paste0("%20IN%20(%27", paste(input$facility, collapse = "%27,%27"),"%27"),"")
+    url <- URLencode(paste0('http://www.depgis.state.pa.us/arcgis/rest/services/emappa/eMapPA_External_Extraction/MapServer/25/query?where=PRIMARY_FACILITY_KIND', gsub(" ", "+", input$facility), "&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentsOnly=false&datumTransformation=&parameterValues=&rangeValues=&f=pjson"))
+    marker <- getEsri(url)
+    return(marker)
+    
+    
+  
+     # url <- paste0('http://www.depgis.state.pa.us/arcgis/rest/services/emappa/eMapPA_External_Extraction/MapServer/25/query?where=PRIMARY_FACILITY_KIND',filter, '&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentsOnly=false&datumTransformation=&parameterValues=&rangeValues=&f=geojson')
+    #print(url)
+    #facilityfilter <- readOGR(url)
+    #return(facilityfilter)
+  })
+}
 
 #Runs the application 
 shinyApp(ui = ui, server = server)
