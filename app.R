@@ -161,7 +161,7 @@ server <- function(input, output, session = session){
       #Data for the markers should be facilitymarker however I wasn't able to get the reactive function to work so I changed the data source so that at least you can see my map in the dashboard 
       addAwesomeMarkers(data = surfacemine, icon = ~icons, popup = ~SITE_NAME) %>%
       addProviderTiles("Esri.WorldGrayCanvas", group = "Gray Canvas", options = providerTileOptions(noWrap = TRUE)) %>%
-      addProviderTiles("CartoDB.DarkMatterNoLabels", group = "Dark Matter", options = providerTileOptions(noWrap = TRUE)) %>%
+      addProviderTiles("CartoDB.DarkMatterNoLabels", group = "Dark Matter", options = providerTileOptions(noWrap = TRUE)) %>% # This basemap doesn't really make sense since your county lines are black!
       addProviderTiles("Esri.WorldTopoMap", group = "Topography", options = providerTileOptions(noWrap = TRUE)) %>%
       addLayersControl(
         baseGroups = c("Gray Canvas", "Dark Matter", "Topography"),
